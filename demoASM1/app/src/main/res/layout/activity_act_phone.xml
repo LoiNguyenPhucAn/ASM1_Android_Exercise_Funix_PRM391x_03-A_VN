@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".act_phone">
+
+    <com.google.android.material.navigationrail.NavigationRailView
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:background="@color/orange_500">
+        <ImageButton
+            android:id="@+id/imgbutton_backactmain_navigationPhone"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:paddingLeft="30dp"
+            android:src="@drawable/ic_baseline_arrow_back_ios_50"
+            android:backgroundTint="@color/orange_500">
+
+        </ImageButton>
+        <TextView
+            android:id="@+id/textview_phone_navigationPhone"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Alarm"
+            android:textSize="30sp"
+            android:textColor="@color/white"
+            android:layout_marginLeft="50dp"
+            android:gravity="center_vertical">
+
+        </TextView>
+    </com.google.android.material.navigationrail.NavigationRailView>
+
+    <TextView
+        android:id="@+id/textview_callTo_actPhone"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="50dp"
+        android:text="Call to...!"
+        android:textColor="@color/orange_500"
+        android:textSize="40sp"
+        android:gravity="center_vertical">
+
+    </TextView>
+
+    <EditText
+        android:id="@+id/edittext_phoneNumber_actPhone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@color/orange_700"
+        android:drawableStart="@drawable/ic_baseline_phone_50"
+        android:textSize="24sp"
+        android:inputType="numberDecimal"
+        android:hint="Some one"
+        android:textColorHint="@color/white">
+
+    </EditText>
+
+    <RadioGroup
+        android:id="@+id/radiogroup_delayTimes_actPhone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="6"
+        android:orientation="horizontal"
+        android:layout_marginTop="200dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp">
+
+        <RadioButton
+            android:id="@+id/radiobutton_hour_delayTimes_actPhone"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:text="Hour"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:textColor="@color/orange_500">
+
+        </RadioButton>
+
+        <RadioButton
+            android:id="@+id/radiobutton_minute_delayTimes_actPhone"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:text="Minute"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:textColor="@color/orange_500">
+
+        </RadioButton>
+
+        <RadioButton
+            android:id="@+id/radiobutton_second_delayTimes_actPhone"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:text="Second"
+            android:textSize="20sp"
+            android:gravity="center"
+            android:textColor="@color/orange_500"
+
+            android:checked="true">
+
+        </RadioButton>
+
+    </RadioGroup>
+
+    <EditText
+        android:id="@+id/edittext_times_actPhone"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@color/gray_light"
+        android:drawableStart="@drawable/ic_baseline_calendar_today_50"
+        android:hint="Time"
+        android:textColorHint="@color/gray"
+        android:inputType="number"
+        android:importantForAutofill="no">
+
+    </EditText>
+
+    <Button
+        android:id="@+id/button_setup_actPhone"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
+        android:backgroundTint="@color/orange_700"
+        android:text="setup"
+        android:textAllCaps="true"
+        android:textSize="24sp">
+
+    </Button>
+</LinearLayout>

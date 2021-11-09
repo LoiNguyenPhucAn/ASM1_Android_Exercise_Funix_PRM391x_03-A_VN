@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">demoASM1</string>
+    <string name="navigationbarName_actSMS">sms</string>
+</resources>

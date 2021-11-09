@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center_vertical"
+
+    tools:context=".MainActivity">
+
+    <Button
+        android:id="@+id/button_sms_ActMain"
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:layout_marginRight="100dp"
+        android:layout_marginLeft="100dp"
+        android:backgroundTint="@color/orange_700"
+        android:drawableLeft="@drawable/ic_baseline_chat_50_white"
+        android:text="Message"
+        android:textSize="20sp"
+        android:textAllCaps="true"
+
+        android:translationZ="10dp">
+
+    </Button>
+    <Button
+        android:id="@+id/button_phone_ActMain"
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:layout_marginRight="100dp"
+        android:layout_marginLeft="100dp"
+        android:backgroundTint="@color/orange_200"
+        android:drawableLeft="@drawable/ic_baseline_phone_50"
+        android:text="phone"
+        android:textSize="20sp"
+        android:textAllCaps="true"
+
+        android:translationZ="10dp">
+
+    </Button>
+
+
+</LinearLayout>

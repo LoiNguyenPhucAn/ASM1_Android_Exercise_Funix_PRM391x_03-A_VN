@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".act_sms">
+
+    <com.google.android.material.navigationrail.NavigationRailView
+        android:id="@+id/navigationbar_navigationsms_actSMS"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:background="@color/orange_500">
+        <ImageButton
+            android:id="@+id/imgbutton_backactmain_navigationsms"
+            android:layout_width="50dp"
+            android:layout_height="match_parent"
+            android:paddingStart="30dp"
+            android:src="@drawable/ic_baseline_arrow_back_ios_50"
+            android:backgroundTint="@color/orange_500">
+
+        </ImageButton>
+        <TextView
+            android:id="@+id/textview_sms_navigationsms"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/navigationbarName_actSMS"
+            android:textAllCaps="true"
+            android:textSize="30sp"
+            android:textColor="@color/white"
+            android:layout_marginStart="50dp"
+            android:gravity="center_vertical">
+
+        </TextView>
+    </com.google.android.material.navigationrail.NavigationRailView>
+    <LinearLayout
+        android:id="@+id/layout_senderbox_actSMS"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:orientation="vertical"
+        android:weightSum="10"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="30dp">
+        <LinearLayout
+            android:id="@+id/layout_phoneNumber_senderBox_actSMS"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:orientation="horizontal"
+            android:background="@color/orange_700">
+            <ImageView
+                android:id="@+id/imgview_phoneicon_phoneNumber_actSMS"
+                android:layout_width="50dp"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_baseline_phone_50">
+
+            </ImageView>
+
+            <EditText
+                android:id="@+id/edittext_phoneNumber_phoneNumer_actSMS"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/orange_700"
+                android:inputType="numberDecimal"
+                android:hint="Sender"
+                android:textColorHint="@color/white"
+                android:textSize="24sp">
+
+            </EditText>
+        </LinearLayout>
+
+        <EditText
+            android:id="@+id/edittext_content_senderBox_actSMS"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="8"
+            android:background="@color/orange_200"
+            android:gravity="start"
+
+            android:hint="Message"
+            android:textColorHint="@color/orange_700"
+
+            android:textSize="18sp">
+
+        </EditText>
+    </LinearLayout>
+    <RadioGroup
+        android:id="@+id/radiogroup_delayTimes_actSMS"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:orientation="horizontal"
+        android:weightSum="6">
+        <RadioButton
+            android:id="@+id/radiobutton_hour_delayTimes_actSMS"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:text="Hour"
+            android:textSize="20sp"
+            android:textColor="@color/orange_500">
+
+        </RadioButton>
+
+        <RadioButton
+            android:id="@+id/radiobutton_minute_delayTimes_actSMS"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:text="Minute"
+            android:textSize="20sp"
+            android:textColor="@color/orange_500">
+
+        </RadioButton>
+
+        <RadioButton
+            android:id="@+id/radiobutton_second_delayTimes_actSMS"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:text="Second"
+            android:textSize="20sp"
+            android:textColor="@color/orange_500"
+            android:checked="true">
+
+        </RadioButton>
+    </RadioGroup>
+
+    <EditText
+        android:id="@+id/edittext_times_actSMS"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:background="@color/gray_light"
+        android:drawableStart="@drawable/ic_baseline_calendar_today_50"
+        android:hint="Time"
+        android:textColorHint="@color/gray"
+        android:inputType="number"
+        android:importantForAutofill="no">
+
+    </EditText>
+
+    <Button
+        android:id="@+id/button_setup_actSMS"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
+        android:text="setup"
+        android:textAllCaps="true"
+        android:textSize="24sp">
+
+    </Button>
+</LinearLayout>
