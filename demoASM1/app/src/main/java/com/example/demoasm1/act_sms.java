@@ -1,42 +1,58 @@
 package com.example.demoasm1;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.telephony.SmsManager;
+import android.telephony.SmsMessage;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 public class act_sms extends AppCompatActivity {
+
+    ImageView ivBackHome;
+    Button btnSetup;
+    EditText etPhoneNumber, etSenderBox, etTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_act_sms);
 
-//        int checkPermissionSMS = ContextCompat.checkSelfPermission(act_sms.this, Manifest.permission.SEND_SMS);
-//        if (checkPermissionSMS != PackageManager.PERMISSION_GRANTED) {
-//            ActivityCompat.shouldShowRequestPermissionRationale(act_sms.this, Manifest.permission.SEND_SMS);
-//            ActivityCompat.requestPermissions(act_sms.this,new String[]{Manifest.permission.SEND_SMS},1);
-//        }
+        ivBackHome = findViewById(R.id.ivBackHome_SMSPage);
+        btnSetup = findViewById(R.id.btnSetup_SMSPage);
+        etPhoneNumber = findViewById(R.id.etPhoneNumber_SMSPage);
+        etSenderBox = findViewById(R.id.etSenderBox_SMSPage);
+        etTime = findViewById(R.id.etTime_SMSPage);
 
-        ImageButton backArrow = findViewById(R.id.imgbutton_backactmain_navigationsms);
-        Intent intentSMSPage = new Intent();
-
-        intentSMSPage.setClass(this,MainActivity.class);
-        backArrow.setOnClickListener(new View.OnClickListener() {
+        btnSetup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(intentSMSPage);
+                if (etPhoneNumber.getText().toString().isEmpty() || etSenderBox.getText().toString().isEmpty() || etTime.getText().toString().isEmpty()) {
+                    Toast.makeText(act_sms.this, "Please check your information!", Toast.LENGTH_SHORT).show();
+                } else if (etPhoneNumber.getText().toString().trim().length() > 15 || etPhoneNumber.getText().toString().trim().length() < 8) {
+                    Toast.makeText(act_sms.this, "The phone is not correct, please check!", Toast.LENGTH_SHORT).show();
+                } else {
+                    sendMessage(etPhoneNumber.getText().toString().trim(),etSenderBox.getText().toString());
+                }
+            }
+        });
+
+        ivBackHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(act_sms.this, MainActivity.class));
                 finish();
             }
         });
+    }
+
+    private void sendMessage(String phone,String msgContent){
+       //TODO
     }
 
 }
