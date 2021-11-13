@@ -5,6 +5,7 @@ import static androidx.core.content.PermissionChecker.PERMISSION_GRANTED;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.utils.widget.ImageFilterButton;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -26,6 +27,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final String TAG = MainActivity.class.getName();
     static final int PERMISSION_SMS = 1;
     static final int PERMISSION_PHONE = 2;
+    static final int PERMISSION_READ_PHONE_STATE = 3;
     Button btnSMS, btnPhone;
 
     @Override
@@ -60,22 +62,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     // When user click on button, this code is run
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.button_sms_ActMain) {
-            if (checkSelfPermission(Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "SEND_SMS permission granted", Toast.LENGTH_SHORT).show();
-                sendMessage();
-            } else {
-                requestPermissions(new String[]{Manifest.permission.SEND_SMS}, PERMISSION_SMS);
-            }
+        if (checkSelfPermission(Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_DENIED) {
+            requestPermissions(new String[]{Manifest.permission.READ_PHONE_STATE},PERMISSION_READ_PHONE_STATE);
+        }else {
+            if (v.getId() == R.id.button_sms_ActMain) {
+                if (checkSelfPermission(Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(this, "SEND_SMS permission granted", Toast.LENGTH_SHORT).show();
+                    sendMessage();
+                } else {
+                    requestPermissions(new String[]{Manifest.permission.SEND_SMS}, PERMISSION_SMS);
+                }
 
-        } else if (v.getId() == R.id.button_phone_ActMain) {
-            if (checkSelfPermission(Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "CALL_PHONE permission granted", Toast.LENGTH_SHORT).show();
-                makePhone();
-            } else {
-                requestPermissions(new String[]{Manifest.permission.CALL_PHONE}, PERMISSION_PHONE);
+            } else if (v.getId() == R.id.button_phone_ActMain) {
+                if (checkSelfPermission(Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(this, "CALL_PHONE permission granted", Toast.LENGTH_SHORT).show();
+                    makePhone();
+                } else {
+                    requestPermissions(new String[]{Manifest.permission.CALL_PHONE}, PERMISSION_PHONE);
+                }
             }
         }
+
     }
 
     @Override
@@ -94,6 +101,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 makePhone();
             } else {
                 Toast.makeText(this, "Please allow permission for using it", Toast.LENGTH_SHORT).show();
+            }
+        }else if(requestCode == PERMISSION_READ_PHONE_STATE){
+            if (permissions.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                return;
+            }else{
+                Toast.makeText(this, "Please allow permission READ_PHONE_STATE for using it", Toast.LENGTH_SHORT).show();
             }
         }
     }

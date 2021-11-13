@@ -2,6 +2,7 @@ package com.example.demoasm1;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
 import android.telephony.SmsManager;
@@ -37,10 +38,10 @@ public class act_sms extends AppCompatActivity {
                     Toast.makeText(act_sms.this, "Please check your information!", Toast.LENGTH_SHORT).show();
                 }
                 //check length of phone number > 8 and < 15 digit. if expression false show announce
-                else if (!(etPhoneNumber.getText().toString().trim().length() <= 15 && etPhoneNumber.getText().toString().trim().length() >=8)) {
+                else if (!(etPhoneNumber.getText().toString().trim().length() <= 15 && etPhoneNumber.getText().toString().trim().length() >= 8)) {
                     Toast.makeText(act_sms.this, "The phone is not correct, please check!", Toast.LENGTH_SHORT).show();
                 } else {
-                    sendMessage(etPhoneNumber.getText().toString().trim(),etSenderBox.getText().toString());
+                    sendMessage(etPhoneNumber.getText().toString().trim(), etSenderBox.getText().toString());
                 }
             }
         });
@@ -54,10 +55,13 @@ public class act_sms extends AppCompatActivity {
         });
     }
 
-    private void sendMessage(String phone,String msgContent){
-       //TODO
+    private void sendMessage(String phone, String msgContent) {
+        //Get the SmsManager instance and call the sendTextMessage method to send message
         SmsManager smsManager = SmsManager.getDefault();
         smsManager.sendTextMessage(phone, null, msgContent, null, null);
+        Toast.makeText(getApplicationContext(), "Message Sent successfully!", Toast.LENGTH_SHORT).show();
+        //Comeback MainActivity
+        startActivity(new Intent(act_sms.this, MainActivity.class));
     }
 
 }
