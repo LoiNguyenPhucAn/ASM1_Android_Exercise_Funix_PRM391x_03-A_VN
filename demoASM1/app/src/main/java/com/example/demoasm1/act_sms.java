@@ -32,9 +32,12 @@ public class act_sms extends AppCompatActivity {
         btnSetup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //check filled all fields, if not show announce
                 if (etPhoneNumber.getText().toString().isEmpty() || etSenderBox.getText().toString().isEmpty() || etTime.getText().toString().isEmpty()) {
                     Toast.makeText(act_sms.this, "Please check your information!", Toast.LENGTH_SHORT).show();
-                } else if (etPhoneNumber.getText().toString().trim().length() > 15 || etPhoneNumber.getText().toString().trim().length() < 8) {
+                }
+                //check length of phone number > 8 and < 15 digit. if expression false show announce
+                else if (!(etPhoneNumber.getText().toString().trim().length() <= 15 && etPhoneNumber.getText().toString().trim().length() >=8)) {
                     Toast.makeText(act_sms.this, "The phone is not correct, please check!", Toast.LENGTH_SHORT).show();
                 } else {
                     sendMessage(etPhoneNumber.getText().toString().trim(),etSenderBox.getText().toString());
@@ -53,6 +56,8 @@ public class act_sms extends AppCompatActivity {
 
     private void sendMessage(String phone,String msgContent){
        //TODO
+        SmsManager smsManager = SmsManager.getDefault();
+        smsManager.sendTextMessage(phone, null, msgContent, null, null);
     }
 
 }
