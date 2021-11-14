@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -17,7 +18,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     static final int PERMISSION_SMS = 1;
     static final int PERMISSION_PHONE = 2;
     static final int PERMISSION_READ_STATE_AND_SMS = 3;
-    static final int PERMISSION_READ_STATE_AND_PHONE = 4;
+    static final int PERMISSION_READ_PHONE_STATE = 4;
     Button btnSMS, btnPhone;
 
     @Override
@@ -77,17 +78,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (v.getId() == R.id.button_sms_ActMain) {
             btnSMS.setAlpha((float) 0.3);
             if (checkSelfPermission(Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_DENIED) {
-                requestPermissions(new String[]{Manifest.permission.READ_PHONE_STATE,Manifest.permission.SEND_SMS}, PERMISSION_READ_STATE_AND_SMS);
+                requestPermissions(new String[]{Manifest.permission.READ_PHONE_STATE, Manifest.permission.SEND_SMS}, PERMISSION_READ_STATE_AND_SMS);
             } else {
                 checkPermissionSMS();
             }
         } else if (v.getId() == R.id.button_phone_ActMain) {
             btnPhone.setAlpha((float) 0.3);
-            if (checkSelfPermission(Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_DENIED) {
-                requestPermissions(new String[]{Manifest.permission.READ_PHONE_STATE}, PERMISSION_READ_STATE_AND_PHONE);
-            } else {
-                checkPermissionPhoneCall();
-            }
+            checkPermissionPhoneCall();
         }
 
     }
@@ -103,6 +100,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     sendMessage();
                 } else {
                     Toast.makeText(this, "Please allow permission for using it", Toast.LENGTH_SHORT).show();
+                    btnSMS.setAlpha((float) 1.0);
                 }
                 break;
             case PERMISSION_PHONE:
@@ -110,28 +108,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     makePhone();
                 } else {
                     Toast.makeText(this, "Please allow permission for using it", Toast.LENGTH_SHORT).show();
+                    btnPhone.setAlpha((float) 1.0);
                 }
                 break;
             case PERMISSION_READ_STATE_AND_SMS:
                 if (permissions.length > 0 && grantResults[0] == PackageManager.PERMISSION_DENIED) {
                     Toast.makeText(this, "Please allow permission READ_PHONE_STATE for using it", Toast.LENGTH_SHORT).show();
                     btnSMS.setAlpha((float) 1.0);
-                }else  if (permissions.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED&&grantResults[1]==PackageManager.PERMISSION_GRANTED){
+                } else if (permissions.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
                     sendMessage();
-                }else{
+                } else {
                     Toast.makeText(this, "Please allow permission for using it", Toast.LENGTH_SHORT).show();
                     btnSMS.setAlpha((float) 1.0);
-                }
-                break;
-            case PERMISSION_READ_STATE_AND_PHONE:
-                if (permissions.length > 0 && grantResults[0] == PackageManager.PERMISSION_DENIED) {
-                    Toast.makeText(this, "Please allow permission READ_PHONE_STATE for using it", Toast.LENGTH_SHORT).show();
-                    btnPhone.setAlpha((float) 1.0);
-                }else  if (permissions.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED&&grantResults[1]==PackageManager.PERMISSION_GRANTED){
-                    makePhone();
-                }else{
-                    Toast.makeText(this, "Please allow permission for using it", Toast.LENGTH_SHORT).show();
-                    btnPhone.setAlpha((float) 1.0);
                 }
                 break;
         }
