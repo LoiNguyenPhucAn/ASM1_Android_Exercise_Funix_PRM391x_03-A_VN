@@ -3,10 +3,14 @@ package com.example.demoasm1;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.telephony.SmsManager;
+import android.transition.Slide;
+import android.view.Gravity;
 import android.view.View;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -28,7 +32,10 @@ public class act_sms extends AppCompatActivity implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setAnimation();
         setContentView(R.layout.activity_act_sms);
+
+
 
         ivBackHome = findViewById(R.id.ivBackHome_SMSPage);
         btnSetup = findViewById(R.id.btnSetup_SMSPage);
@@ -53,6 +60,17 @@ public class act_sms extends AppCompatActivity implements View.OnClickListener {
         r_Hour.setOnClickListener(this);
         btnSetup.setOnClickListener(this);
 
+    }
+
+    public void setAnimation(){
+        if(Build.VERSION.SDK_INT>20) {
+            Slide slide = new Slide();
+            slide.setSlideEdge(Gravity.RIGHT);
+            slide.setDuration(400);
+            slide.setInterpolator(new DecelerateInterpolator());
+            getWindow().setExitTransition(slide);
+            getWindow().setEnterTransition(slide);
+        }
     }
 
     private void sendMessage(String phone, String msgContent) {

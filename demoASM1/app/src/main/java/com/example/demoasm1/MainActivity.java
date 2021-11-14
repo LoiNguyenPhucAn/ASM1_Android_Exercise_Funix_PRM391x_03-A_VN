@@ -7,8 +7,12 @@ import android.Manifest;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.transition.Slide;
+import android.view.Gravity;
 import android.view.View;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.Toast;
 
@@ -18,12 +22,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     static final int PERMISSION_SMS = 1;
     static final int PERMISSION_PHONE = 2;
     static final int PERMISSION_READ_STATE_AND_SMS = 3;
-    static final int PERMISSION_READ_PHONE_STATE = 4;
     Button btnSMS, btnPhone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setAnimation();
         setContentView(R.layout.activity_main);
 
 //        Khai báo biến smsButton kiểu dữ liệu Button
@@ -44,7 +48,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     // Mở màn hình SMS
     private void sendMessage() {
-        startActivity(new Intent(this, act_sms.class));
+        Intent i = new Intent(getApplicationContext(),act_sms.class);
+
+        if(Build.VERSION.SDK_INT>20){
+            ActivityOptions options =
+                    ActivityOptions.makeSceneTransitionAnimation(this);
+            startActivity(i,options.toBundle());
+        }else {
+            startActivity(i);
+        }
     }
 
     // Mở màn hình phone
@@ -69,6 +81,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             makePhone();
         } else {
             requestPermissions(new String[]{Manifest.permission.CALL_PHONE}, PERMISSION_PHONE);
+        }
+    }
+
+    public void setAnimation(){
+        if(Build.VERSION.SDK_INT>20) {
+            Slide slide = new Slide();
+            slide.setSlideEdge(Gravity.RIGHT);
+            slide.setDuration(500);
+            slide.setInterpolator(new DecelerateInterpolator());
+            getWindow().setExitTransition(slide);
+            getWindow().setEnterTransition(slide);
         }
     }
 
