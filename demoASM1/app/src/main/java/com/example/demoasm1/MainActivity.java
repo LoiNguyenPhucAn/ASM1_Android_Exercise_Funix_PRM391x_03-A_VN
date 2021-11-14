@@ -1,17 +1,9 @@
 package com.example.demoasm1;
 
-import static androidx.core.content.PermissionChecker.PERMISSION_DENIED;
-import static androidx.core.content.PermissionChecker.PERMISSION_GRANTED;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.utils.widget.ImageFilterButton;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
 import android.Manifest;
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -19,15 +11,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import java.security.Permission;
-import java.security.PrivilegedAction;
-
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = MainActivity.class.getName();
     static final int PERMISSION_SMS = 1;
     static final int PERMISSION_PHONE = 2;
-    static final int PERMISSION_READ_PHONE_STATE = 3;
+    static final int PERMISSION_READ_STATE_AND_SMS = 3;
+    static final int PERMISSION_READ_STATE_AND_PHONE = 4;
     Button btnSMS, btnPhone;
 
     @Override
@@ -38,10 +28,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //        Khai báo biến smsButton kiểu dữ liệu Button
 //        và gán giá trị bằng id của button sms trong layout activity_main.xml
         btnSMS = findViewById(R.id.button_sms_ActMain);
+        btnSMS.setAlpha((float) 1.0);
 
 //        Khai báo biến phoneButton kiểu dữ liệu Button
 //        và gán giá trị bằng id của button phone trong layout activity_main.xml
         btnPhone = findViewById(R.id.button_phone_ActMain);
+        btnPhone.setAlpha((float) 1.0);
 
 //        Scan click on button event
         btnSMS.setOnClickListener(this);
@@ -59,27 +51,42 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         startActivity(new Intent(this, act_phone.class));
     }
 
+    //phương thức check PERMISSION_SMS
+    private void checkPermissionSMS() {
+        if (checkSelfPermission(Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(this, "SEND_SMS permission granted", Toast.LENGTH_SHORT).show();
+            sendMessage();
+        } else {
+            requestPermissions(new String[]{Manifest.permission.SEND_SMS}, PERMISSION_SMS);
+        }
+    }
+
+    //phương thức check PERMISSION_PHONE_CALL
+    private void checkPermissionPhoneCall() {
+        if (checkSelfPermission(Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(this, "CALL_PHONE permission granted", Toast.LENGTH_SHORT).show();
+            makePhone();
+        } else {
+            requestPermissions(new String[]{Manifest.permission.CALL_PHONE}, PERMISSION_PHONE);
+        }
+    }
+
     // When user click on button, this code is run
     @Override
     public void onClick(View v) {
-        if (checkSelfPermission(Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_DENIED) {
-            requestPermissions(new String[]{Manifest.permission.READ_PHONE_STATE},PERMISSION_READ_PHONE_STATE);
-        }else {
-            if (v.getId() == R.id.button_sms_ActMain) {
-                if (checkSelfPermission(Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(this, "SEND_SMS permission granted", Toast.LENGTH_SHORT).show();
-                    sendMessage();
-                } else {
-                    requestPermissions(new String[]{Manifest.permission.SEND_SMS}, PERMISSION_SMS);
-                }
-
-            } else if (v.getId() == R.id.button_phone_ActMain) {
-                if (checkSelfPermission(Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(this, "CALL_PHONE permission granted", Toast.LENGTH_SHORT).show();
-                    makePhone();
-                } else {
-                    requestPermissions(new String[]{Manifest.permission.CALL_PHONE}, PERMISSION_PHONE);
-                }
+        if (v.getId() == R.id.button_sms_ActMain) {
+            btnSMS.setAlpha((float) 0.3);
+            if (checkSelfPermission(Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_DENIED) {
+                requestPermissions(new String[]{Manifest.permission.READ_PHONE_STATE,Manifest.permission.SEND_SMS}, PERMISSION_READ_STATE_AND_SMS);
+            } else {
+                checkPermissionSMS();
+            }
+        } else if (v.getId() == R.id.button_phone_ActMain) {
+            btnPhone.setAlpha((float) 0.3);
+            if (checkSelfPermission(Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_DENIED) {
+                requestPermissions(new String[]{Manifest.permission.READ_PHONE_STATE}, PERMISSION_READ_STATE_AND_PHONE);
+            } else {
+                checkPermissionPhoneCall();
             }
         }
 
@@ -87,27 +94,46 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
 //    When user click on permission announcement, this code is executed
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        if (requestCode == PERMISSION_SMS) {
-            if (permissions.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                sendMessage();
-            } else {
-                Toast.makeText(this, "Please allow permission for using it", Toast.LENGTH_SHORT).show();
-            }
-        } else if (requestCode == PERMISSION_PHONE) {
-            if (permissions.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                makePhone();
-            } else {
-                Toast.makeText(this, "Please allow permission for using it", Toast.LENGTH_SHORT).show();
-            }
-        }else if(requestCode == PERMISSION_READ_PHONE_STATE){
-            if (permissions.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                return;
-            }else{
-                Toast.makeText(this, "Please allow permission READ_PHONE_STATE for using it", Toast.LENGTH_SHORT).show();
-            }
+        switch (requestCode) {
+            case PERMISSION_SMS:
+                if (permissions.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    sendMessage();
+                } else {
+                    Toast.makeText(this, "Please allow permission for using it", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case PERMISSION_PHONE:
+                if (permissions.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    makePhone();
+                } else {
+                    Toast.makeText(this, "Please allow permission for using it", Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case PERMISSION_READ_STATE_AND_SMS:
+                if (permissions.length > 0 && grantResults[0] == PackageManager.PERMISSION_DENIED) {
+                    Toast.makeText(this, "Please allow permission READ_PHONE_STATE for using it", Toast.LENGTH_SHORT).show();
+                    btnSMS.setAlpha((float) 1.0);
+                }else  if (permissions.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED&&grantResults[1]==PackageManager.PERMISSION_GRANTED){
+                    sendMessage();
+                }else{
+                    Toast.makeText(this, "Please allow permission for using it", Toast.LENGTH_SHORT).show();
+                    btnSMS.setAlpha((float) 1.0);
+                }
+                break;
+            case PERMISSION_READ_STATE_AND_PHONE:
+                if (permissions.length > 0 && grantResults[0] == PackageManager.PERMISSION_DENIED) {
+                    Toast.makeText(this, "Please allow permission READ_PHONE_STATE for using it", Toast.LENGTH_SHORT).show();
+                    btnPhone.setAlpha((float) 1.0);
+                }else  if (permissions.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED&&grantResults[1]==PackageManager.PERMISSION_GRANTED){
+                    makePhone();
+                }else{
+                    Toast.makeText(this, "Please allow permission for using it", Toast.LENGTH_SHORT).show();
+                    btnPhone.setAlpha((float) 1.0);
+                }
+                break;
         }
     }
 }

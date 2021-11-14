@@ -105,6 +105,7 @@ public class act_sms extends AppCompatActivity implements View.OnClickListener {
                 else if (etTime.getText().toString().isEmpty()) {
                     Toast.makeText(getApplicationContext(), "Please set time first", Toast.LENGTH_SHORT).show();
                 } else {
+                    btnSetup.setAlpha((float)0.3);
                     sendMessage(etPhoneNumber.getText().toString().trim(), etSenderBox.getText().toString());
                 }
                 break;

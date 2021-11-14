@@ -53,8 +53,8 @@ public class act_phone extends AppCompatActivity implements View.OnClickListener
         r_Sec.setOnClickListener(this);
         r_Sec.setOnClickListener(this);
 
-
         btnSetup.setOnClickListener(this);
+
 
     }
 
@@ -92,6 +92,7 @@ public class act_phone extends AppCompatActivity implements View.OnClickListener
                 finish();
                 break;
             case R.id.btnSetup_PhonePage:// trường hợp click vào nút setup
+
                 if (etPhoneNumber.getText().toString().isEmpty()) {
                     Toast.makeText(getApplicationContext(), "Please input phone first", Toast.LENGTH_SHORT).show();
                 } else if (!(etPhoneNumber.getText().toString().trim().length() <= 15 && etPhoneNumber.getText().toString().trim().length() >= 8)) {
@@ -99,6 +100,7 @@ public class act_phone extends AppCompatActivity implements View.OnClickListener
                 } else if (etTime.getText().toString().isEmpty()) {
                     Toast.makeText(getApplicationContext(), "Please set time first", Toast.LENGTH_SHORT).show();
                 } else {
+                    btnSetup.setAlpha((float) 0.3);
                     makePhoneCall();
                     startActivity(new Intent(getApplicationContext(), MainActivity.class));
                 }
