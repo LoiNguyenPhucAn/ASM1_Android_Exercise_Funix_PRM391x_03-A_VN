@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.telephony.SmsManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,11 +16,15 @@ import android.widget.Toast;
 
 public class act_phone extends AppCompatActivity implements View.OnClickListener {
 
+    private final String SEC = "seconds", HOURS = "hours", MINS = "minutes";
+
     ImageView ivBackArrow;
     EditText etPhoneNumber,etTime;
     Button btnSetup;
     RadioButton r_Hour,r_Min, r_Sec;
-    String delayTime;
+    String stringDelayTime;
+
+    Handler handler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,11 +40,11 @@ public class act_phone extends AppCompatActivity implements View.OnClickListener
         ivBackArrow = findViewById(R.id.ivBackHome_PhonePage);
 
         if (r_Hour.isChecked()){
-            delayTime = "hours";
+            stringDelayTime = HOURS;
         }else if(r_Min.isChecked()){
-            delayTime = "minutes";
+            stringDelayTime = MINS;
         }else {
-            delayTime = "seconds";
+            stringDelayTime = SEC;
         }
 
         ivBackArrow.setOnClickListener(this);
@@ -54,11 +60,26 @@ public class act_phone extends AppCompatActivity implements View.OnClickListener
 
     //Phương thức thực hiện cuộc gọi
     private void makePhoneCall(){
-        Intent intent = new Intent(Intent.ACTION_CALL);
-        intent.setData(Uri.parse("tel:"+etPhoneNumber.getText().toString().trim()));
-        startActivity(intent);
-        String announcePhoneCall = "A call will be done after " + etTime.getText().toString() +" "+ delayTime;
+
+        String announcePhoneCall = "A call will be done after " + etTime.getText().toString() +" "+ stringDelayTime;
         Toast.makeText(getApplicationContext(), announcePhoneCall, Toast.LENGTH_SHORT).show();
+
+        int delayTimes = Integer.parseInt(etTime.getText().toString()) * 1000;
+        if (stringDelayTime.equals(MINS)) {
+            delayTimes = delayTimes * 60;
+        } else if (stringDelayTime.equals(HOURS)) {
+            delayTimes = delayTimes * 3600;
+        }
+        //object Handler dùng để tạo thời gian trễ cho việc thực thi lệnh sendMessage
+        //READ MORE: https://qastack.vn/programming/15874117/how-to-set-delay-in-android
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Intent intent = new Intent(Intent.ACTION_CALL);
+                intent.setData(Uri.parse("tel:"+etPhoneNumber.getText().toString().trim()));
+                startActivity(intent);
+            }
+        },delayTimes);
     }
 
     @Override
@@ -84,17 +105,17 @@ public class act_phone extends AppCompatActivity implements View.OnClickListener
                 break;
             case R.id.radioHour_PhonePage://trường hợp chọn radio button hours
                 if (((RadioButton) view).isChecked()){
-                    delayTime = "hours";
+                    stringDelayTime = HOURS ;
                 }
                 break;
             case R.id.radioMin_PhonePage://trường hợp chọn radio button minutes
                 if (((RadioButton) view).isChecked()){
-                    delayTime = "minutes";
+                    stringDelayTime = MINS;
                 }
                 break;
             case R.id.radioSec_PhonePage://trường hợp chọn radio button seconds
                 if (((RadioButton) view).isChecked()){
-                    delayTime = "seconds";
+                    stringDelayTime = SEC;
                 }
                 break;
 
