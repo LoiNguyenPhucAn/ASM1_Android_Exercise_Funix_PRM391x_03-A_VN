@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">demoASM1</string>
     <string name="navigationbarName_actSMS">sms</string>
+    <string name="second">Second</string>
+    <string name="minute">Minute</string>
+    <string name="hour">Hour</string>
 </resources>

@@ -5,33 +5,36 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/white"
     tools:context=".act_phone">
 
-    <com.google.android.material.navigationrail.NavigationRailView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="70dp"
+        android:orientation="horizontal"
         android:background="@color/orange_500">
-        <ImageButton
-            android:id="@+id/imgbutton_backactmain_navigationPhone"
+
+        <ImageView
+            android:id="@+id/ivBackHome_PhonePage"
             android:layout_width="50dp"
             android:layout_height="match_parent"
-            android:paddingLeft="30dp"
+            android:layout_marginLeft="20dp"
+            android:backgroundTint="@color/orange_500"
+            android:clickable="true"
             android:src="@drawable/ic_baseline_arrow_back_ios_50"
-            android:backgroundTint="@color/orange_500">
+            tools:ignore="SpeakableTextPresentCheck">
+        </ImageView>
 
-        </ImageButton>
         <TextView
-            android:id="@+id/textview_phone_navigationPhone"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:gravity="center_vertical"
             android:text="Alarm"
-            android:textSize="30sp"
+            android:textAllCaps="true"
             android:textColor="@color/white"
-            android:layout_marginLeft="50dp"
-            android:gravity="center_vertical">
-
+            android:textSize="30sp">
         </TextView>
-    </com.google.android.material.navigationrail.NavigationRailView>
+    </LinearLayout>
 
     <TextView
         android:id="@+id/textview_callTo_actPhone"
@@ -48,19 +51,21 @@
     </TextView>
 
     <EditText
-        android:id="@+id/edittext_phoneNumber_actPhone"
+        android:id="@+id/etPhoneNumber_PhonePage"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
         android:layout_marginLeft="20dp"
         android:layout_marginRight="20dp"
         android:background="@color/orange_700"
         android:drawableStart="@drawable/ic_baseline_phone_50"
-        android:textSize="24sp"
-        android:inputType="numberDecimal"
+        android:gravity="center_vertical"
         android:hint="Some one"
-        android:textColorHint="@color/white">
+        android:inputType="numberDecimal"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:textColorHint="@color/white"
+        android:textSize="24sp"
+        tools:ignore="TextContrastCheck">
 
     </EditText>
 
@@ -75,11 +80,11 @@
         android:layout_marginRight="30dp">
 
         <RadioButton
-            android:id="@+id/radiobutton_hour_delayTimes_actPhone"
+            android:id="@+id/radioHour_PhonePage"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="2"
-            android:text="Hour"
+            android:text="@string/hour"
             android:textSize="20sp"
             android:gravity="center"
             android:textColor="@color/orange_500">
@@ -87,11 +92,11 @@
         </RadioButton>
 
         <RadioButton
-            android:id="@+id/radiobutton_minute_delayTimes_actPhone"
+            android:id="@+id/radioMin_PhonePage"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="2"
-            android:text="Minute"
+            android:text="@string/minute"
             android:textSize="20sp"
             android:gravity="center"
             android:textColor="@color/orange_500">
@@ -99,11 +104,11 @@
         </RadioButton>
 
         <RadioButton
-            android:id="@+id/radiobutton_second_delayTimes_actPhone"
+            android:id="@+id/radioSec_PhonePage"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="2"
-            android:text="Second"
+            android:text="@string/second"
             android:textSize="20sp"
             android:gravity="center"
             android:textColor="@color/orange_500"
@@ -115,7 +120,7 @@
     </RadioGroup>
 
     <EditText
-        android:id="@+id/edittext_times_actPhone"
+        android:id="@+id/etTime_PhonePage"
         android:layout_width="match_parent"
         android:layout_height="50dp"
         android:layout_marginLeft="20dp"
@@ -123,23 +128,27 @@
         android:background="@color/gray_light"
         android:drawableStart="@drawable/ic_baseline_calendar_today_50"
         android:hint="Time"
-        android:textColorHint="@color/gray"
+        android:importantForAutofill="no"
         android:inputType="number"
-        android:importantForAutofill="no">
+        android:textColorHint="@color/gray"
+        tools:ignore="TextContrastCheck">
 
     </EditText>
 
     <Button
-        android:id="@+id/button_setup_actPhone"
+        android:id="@+id/btnSetup_PhonePage"
         android:layout_width="match_parent"
         android:layout_height="70dp"
+        android:layout_marginLeft="20dp"
         android:layout_marginTop="20dp"
         android:layout_marginRight="20dp"
-        android:layout_marginLeft="20dp"
-        android:backgroundTint="@color/orange_700"
+        android:background="@color/orange_700"
+        android:gravity="center"
         android:text="setup"
         android:textAllCaps="true"
-        android:textSize="24sp">
+        android:textColor="@color/white"
+        android:textSize="24sp"
+        tools:ignore="TextContrastCheck">
 
     </Button>
 </LinearLayout>

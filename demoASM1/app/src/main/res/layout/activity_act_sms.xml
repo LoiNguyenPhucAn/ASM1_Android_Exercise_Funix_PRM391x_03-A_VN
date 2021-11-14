@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/white"
     tools:context=".act_sms">
 
     <LinearLayout
@@ -32,7 +33,6 @@
             android:text="@string/navigationbarName_actSMS"
             android:textAllCaps="true"
             android:textColor="@color/white"
-
             android:textSize="30sp">
 
         </TextView>
@@ -70,6 +70,8 @@
                 android:inputType="numberDecimal"
                 android:textColorHint="@color/white"
                 android:textSize="24sp"
+                android:gravity="center_vertical"
+                android:layout_marginLeft="10dp"
                 tools:ignore="TextContrastCheck">
 
             </EditText>
@@ -99,36 +101,36 @@
         android:orientation="horizontal"
         android:weightSum="6">
         <RadioButton
-            android:id="@+id/radiobutton_hour_delayTimes_actSMS"
+            android:id="@+id/radioHour_SMSPage"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="2"
             android:gravity="center"
-            android:text="Hour"
+            android:text="@string/hour"
             android:textSize="20sp"
             android:textColor="@color/orange_500">
 
         </RadioButton>
 
         <RadioButton
-            android:id="@+id/radiobutton_minute_delayTimes_actSMS"
+            android:id="@+id/radioMin_SMSPage"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="2"
             android:gravity="center"
-            android:text="Minute"
+            android:text="@string/minute"
             android:textSize="20sp"
             android:textColor="@color/orange_500">
 
         </RadioButton>
 
         <RadioButton
-            android:id="@+id/radiobutton_second_delayTimes_actSMS"
+            android:id="@+id/radioSec_SMSPage"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="2"
             android:gravity="center"
-            android:text="Second"
+            android:text="@string/second"
             android:textSize="20sp"
             android:textColor="@color/orange_500"
             android:checked="true">
@@ -160,6 +162,9 @@
         android:layout_marginRight="20dp"
         android:layout_marginLeft="20dp"
         android:text="setup"
+        android:gravity="center"
+        android:background="@color/orange_500"
+        android:textColor="@color/white"
         android:textAllCaps="true"
         android:textSize="24sp">
 
