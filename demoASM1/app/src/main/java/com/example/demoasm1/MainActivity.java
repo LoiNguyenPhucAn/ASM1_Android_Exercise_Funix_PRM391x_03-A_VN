@@ -10,8 +10,11 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.transition.Slide;
+import android.transition.Transition;
+import android.transition.TransitionInflater;
 import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.Button;
 import android.widget.Toast;
@@ -27,7 +30,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setAnimation();
+
+        /*Call this before setContentView() is called to enable transition*/
+        getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
+        // Use the following code for fade animation using XML
+        Transition fadeAnimation = TransitionInflater.from(this).inflateTransition(R.transition.fade);
+        fadeAnimation.setDuration(1000);
+        getWindow().setEnterTransition(fadeAnimation);
+
         setContentView(R.layout.activity_main);
 
 //        Khai báo biến smsButton kiểu dữ liệu Button
@@ -48,20 +58,35 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     // Mở màn hình SMS
     private void sendMessage() {
-        Intent i = new Intent(getApplicationContext(),act_sms.class);
+        // Check if we're running on Android 5.0 or higher
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            // Apply activity transition
+            /*Create an object of activity options to enable scene transition animation*/
+            ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this);
 
-        if(Build.VERSION.SDK_INT>20){
-            ActivityOptions options =
-                    ActivityOptions.makeSceneTransitionAnimation(this);
-            startActivity(i,options.toBundle());
-        }else {
-            startActivity(i);
+            /*Pass it to startActivity() method as the second parameter*/
+            startActivity(new Intent(this, act_sms.class), options.toBundle());
+        } else {
+            // Swap without transition
+             startActivity(new Intent(this, act_sms.class));
         }
+
     }
 
     // Mở màn hình phone
     private void makePhone() {
-        startActivity(new Intent(this, act_phone.class));
+        // Check if we're running on Android 5.0 or higher
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            // Apply activity transition
+            /*Create an object of activity options to enable scene transition animation*/
+            ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this);
+
+            /*Pass it to startActivity() method as the second parameter*/
+            startActivity(new Intent(this, act_phone.class), options.toBundle());
+        } else {
+            // Swap without transition
+            startActivity(new Intent(this, act_phone.class));
+        }
     }
 
     //phương thức check PERMISSION_SMS
@@ -81,17 +106,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             makePhone();
         } else {
             requestPermissions(new String[]{Manifest.permission.CALL_PHONE}, PERMISSION_PHONE);
-        }
-    }
-
-    public void setAnimation(){
-        if(Build.VERSION.SDK_INT>20) {
-            Slide slide = new Slide();
-            slide.setSlideEdge(Gravity.RIGHT);
-            slide.setDuration(500);
-            slide.setInterpolator(new DecelerateInterpolator());
-            getWindow().setExitTransition(slide);
-            getWindow().setEnterTransition(slide);
         }
     }
 

@@ -2,15 +2,20 @@ package com.example.demoasm1;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
+
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.telephony.SmsManager;
-import android.transition.Slide;
-import android.view.Gravity;
+
+import android.transition.Transition;
+import android.transition.TransitionInflater;
 import android.view.View;
-import android.view.animation.DecelerateInterpolator;
+
+
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -32,10 +37,14 @@ public class act_sms extends AppCompatActivity implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setAnimation();
+        /*Call this before setContentView() is called to enable transition*/
+        getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
+        // Use the following code for slide animation using XML
+        Transition slideAnimation = TransitionInflater.from(this).inflateTransition(R.transition.slide);
+        slideAnimation.setDuration(1000);
+        getWindow().setEnterTransition(slideAnimation);
+
         setContentView(R.layout.activity_act_sms);
-
-
 
         ivBackHome = findViewById(R.id.ivBackHome_SMSPage);
         btnSetup = findViewById(R.id.btnSetup_SMSPage);
@@ -62,14 +71,17 @@ public class act_sms extends AppCompatActivity implements View.OnClickListener {
 
     }
 
-    public void setAnimation(){
-        if(Build.VERSION.SDK_INT>20) {
-            Slide slide = new Slide();
-            slide.setSlideEdge(Gravity.RIGHT);
-            slide.setDuration(400);
-            slide.setInterpolator(new DecelerateInterpolator());
-            getWindow().setExitTransition(slide);
-            getWindow().setEnterTransition(slide);
+    private void comebackHome(){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            // Apply activity transition
+            /*Create an object of activity options to enable scene transition animation*/
+            ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this);
+
+            /*Pass it to startActivity() method as the second parameter*/
+            startActivity(new Intent(this, MainActivity.class), options.toBundle());
+        } else {
+            // Swap without transition
+            startActivity(new Intent(this, MainActivity.class));
         }
     }
 
@@ -98,7 +110,7 @@ public class act_sms extends AppCompatActivity implements View.OnClickListener {
         }, delayTimes);
 
         //Comeback MainActivity
-        startActivity(new Intent(act_sms.this, MainActivity.class));
+        comebackHome();
     }
 
     @Override
@@ -107,7 +119,7 @@ public class act_sms extends AppCompatActivity implements View.OnClickListener {
         // thực thi đoạn code tương ứng với component ID đã click thông qua rẽ nhánh switch
         switch (view.getId()) {
             case R.id.ivBackHome_SMSPage://trường hợp click vào nút mũi tên phía trên góc trái màn hình
-                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                comebackHome();
                 finish();
                 break;
             case R.id.btnSetup_SMSPage:// trường hợp click vào nút setup
