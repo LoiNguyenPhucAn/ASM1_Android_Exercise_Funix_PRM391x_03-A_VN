@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
         // Use the following code for fade animation using XML
         Transition fadeAnimation = TransitionInflater.from(this).inflateTransition(R.transition.fade);
-        fadeAnimation.setDuration(1000);
+        fadeAnimation.setDuration(3000);
         getWindow().setEnterTransition(fadeAnimation);
 
         setContentView(R.layout.activity_main);
@@ -58,35 +58,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     // Mở màn hình SMS
     private void sendMessage() {
-        // Check if we're running on Android 5.0 or higher
+       /* // Check if we're running on Android 5.0 or higher
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             // Apply activity transition
-            /*Create an object of activity options to enable scene transition animation*/
+            *//*Create an object of activity options to enable scene transition animation*//*
             ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this);
 
-            /*Pass it to startActivity() method as the second parameter*/
+            *//*Pass it to startActivity() method as the second parameter*//*
             startActivity(new Intent(this, act_sms.class), options.toBundle());
         } else {
             // Swap without transition
              startActivity(new Intent(this, act_sms.class));
-        }
-
+        }*/
+        startActivity(new Intent(this, act_sms.class));
     }
 
     // Mở màn hình phone
     private void makePhone() {
-        // Check if we're running on Android 5.0 or higher
+        /*// Check if we're running on Android 5.0 or higher
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             // Apply activity transition
-            /*Create an object of activity options to enable scene transition animation*/
+            *//*Create an object of activity options to enable scene transition animation*//*
             ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(this);
 
-            /*Pass it to startActivity() method as the second parameter*/
-            startActivity(new Intent(this, act_phone.class), options.toBundle());
+            *//*Pass it to startActivity() method as the second parameter*//*
+            startActivity(new Intent(getApplicationContext(), act_phone.class), options.toBundle());
         } else {
             // Swap without transition
-            startActivity(new Intent(this, act_phone.class));
-        }
+            startActivity(new Intent(getApplicationContext(), act_phone.class));
+        }*/
+
+        startActivity(new Intent(getApplicationContext(), act_phone.class));
     }
 
     //phương thức check PERMISSION_SMS

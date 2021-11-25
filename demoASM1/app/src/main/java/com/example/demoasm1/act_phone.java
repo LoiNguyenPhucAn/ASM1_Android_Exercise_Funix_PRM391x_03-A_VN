@@ -1,9 +1,13 @@
 package com.example.demoasm1;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -27,9 +31,9 @@ public class act_phone extends AppCompatActivity implements View.OnClickListener
     private final String SEC = "seconds", HOURS = "hours", MINS = "minutes";
 
     ImageView ivBackArrow;
-    EditText etPhoneNumber,etTime;
+    EditText etPhoneNumber, etTime;
     Button btnSetup;
-    RadioButton r_Hour,r_Min, r_Sec;
+    RadioButton r_Hour, r_Min, r_Sec;
     String stringDelayTime;
 
     Handler handler = new Handler();
@@ -41,9 +45,9 @@ public class act_phone extends AppCompatActivity implements View.OnClickListener
         /*Call this before setContentView() is called to enable transition*/
         getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
         // Use the following code for explode animation using XML
-        Transition explodeAnimation = TransitionInflater.from(this).inflateTransition(R.transition.explode);
-        explodeAnimation.setDuration(1000);
-        getWindow().setEnterTransition(explodeAnimation);
+        Transition fadeAnimation = TransitionInflater.from(this).inflateTransition(R.transition.fade);
+        fadeAnimation.setDuration(1500);
+        getWindow().setEnterTransition(fadeAnimation);
 
         setContentView(R.layout.activity_act_phone);
 
@@ -55,11 +59,11 @@ public class act_phone extends AppCompatActivity implements View.OnClickListener
         r_Sec = findViewById(R.id.radioSec_PhonePage);
         ivBackArrow = findViewById(R.id.ivBackHome_PhonePage);
 
-        if (r_Hour.isChecked()){
+        if (r_Hour.isChecked()) {
             stringDelayTime = HOURS;
-        }else if(r_Min.isChecked()){
+        } else if (r_Min.isChecked()) {
             stringDelayTime = MINS;
-        }else {
+        } else {
             stringDelayTime = SEC;
         }
 
@@ -74,7 +78,7 @@ public class act_phone extends AppCompatActivity implements View.OnClickListener
 
     }
 
-    private void comebackHome(){
+    private void comebackHome() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             // Apply activity transition
             /*Create an object of activity options to enable scene transition animation*/
@@ -89,9 +93,9 @@ public class act_phone extends AppCompatActivity implements View.OnClickListener
     }
 
     //Phương thức thực hiện cuộc gọi
-    private void makePhoneCall(){
+    private void makePhoneCall() {
 
-        String announcePhoneCall = "A call will be done after " + etTime.getText().toString() +" "+ stringDelayTime;
+        String announcePhoneCall = "A call will be done after " + etTime.getText().toString() + " " + stringDelayTime;
         Toast.makeText(getApplicationContext(), announcePhoneCall, Toast.LENGTH_SHORT).show();
 
         int delayTimes = Integer.parseInt(etTime.getText().toString()) * 1000;
@@ -103,10 +107,11 @@ public class act_phone extends AppCompatActivity implements View.OnClickListener
         //object Handler dùng để tạo thời gian trễ cho việc thực thi lệnh sendMessage
         //READ MORE: https://qastack.vn/programming/15874117/how-to-set-delay-in-android
         handler.postDelayed(new Runnable() {
+            @SuppressLint("MissingPermission")
             @Override
             public void run() {
                 Intent intent = new Intent(Intent.ACTION_CALL);
-                intent.setData(Uri.parse("tel:"+etPhoneNumber.getText().toString().trim()));
+                intent.setData(Uri.parse("tel:" + etPhoneNumber.getText().toString().trim()));
                 startActivity(intent);
             }
         },delayTimes);

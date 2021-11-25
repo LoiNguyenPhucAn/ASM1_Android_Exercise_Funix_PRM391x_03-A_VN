@@ -2,9 +2,14 @@ package com.example.demoasm1;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.app.ActivityOptions;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 
+import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -25,6 +30,12 @@ import android.widget.Toast;
 public class act_sms extends AppCompatActivity implements View.OnClickListener {
 
     private final String SEC = "seconds", HOURS = "hours", MINS = "minutes";
+
+    String SENT = "SMS_SENT";
+    String DELIVERED = "SMS_DELIVERED";
+
+    PendingIntent sentPI,deliverPI;
+    BroadcastReceiver smsSentReceiver, smsDeliveredReceiver;
 
     ImageView ivBackHome;
     Button btnSetup;
@@ -69,6 +80,74 @@ public class act_sms extends AppCompatActivity implements View.OnClickListener {
         r_Hour.setOnClickListener(this);
         btnSetup.setOnClickListener(this);
 
+        sentPI = PendingIntent.getBroadcast(this,0,new Intent(SENT),0);
+        deliverPI = PendingIntent.getBroadcast(this,0,new Intent(DELIVERED),0);
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        smsSentReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+                // phần code xử lý khi nhận được BroadcastReceiver từ PendingIntent sentPI
+                switch (getResultCode()){
+                    case Activity.RESULT_OK:
+                        Toast.makeText(getApplicationContext(), "SMS Sent!", Toast.LENGTH_SHORT).show();
+                        break;
+                        
+                    case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
+                        Toast.makeText(getApplicationContext(), "Generic failure!", Toast.LENGTH_SHORT).show();
+                        break;
+                        
+                    case SmsManager.RESULT_ERROR_NO_SERVICE:
+                        Toast.makeText(getApplicationContext(), "No Service!", Toast.LENGTH_SHORT).show();
+                        break;
+
+                    case SmsManager.RESULT_ERROR_NULL_PDU:
+                        Toast.makeText(getApplicationContext(), "Null PDU!", Toast.LENGTH_SHORT).show();
+                        break;
+
+                    case SmsManager.RESULT_ERROR_RADIO_OFF:
+                        Toast.makeText(getApplicationContext(), "Radio off!", Toast.LENGTH_SHORT).show();
+                        break;
+
+                }
+            }
+        };
+
+        smsDeliveredReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+                // phần code xử lý khi nhận được BroadcastReceiver từ PendingIntent deliveredPI
+                switch (getResultCode()){
+                    case Activity.RESULT_OK:
+                        Toast.makeText(getApplicationContext(),"Delivered!", Toast.LENGTH_SHORT).show();
+                        break;
+                    case Activity.RESULT_CANCELED:
+                        Toast.makeText(getApplicationContext(), "SMS not delivered!", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+            }
+        };
+
+        // Đăng ký BroadcastReceiver SMS_SENT và SMS_DELIVERED trong file Manifest
+        registerReceiver(smsSentReceiver, new IntentFilter(SENT));
+        registerReceiver(smsDeliveredReceiver,new IntentFilter(DELIVERED));
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        unregisterReceiver(smsSentReceiver);
+        unregisterReceiver(smsDeliveredReceiver);
+
     }
 
     private void comebackHome(){
@@ -104,8 +183,8 @@ public class act_sms extends AppCompatActivity implements View.OnClickListener {
             public void run() {
                 //Get the SmsManager instance and call the sendTextMessage method to send message
                 SmsManager smsManager = SmsManager.getDefault();
-                smsManager.sendTextMessage(phone, null, msgContent, null, null);
-                Toast.makeText(getApplicationContext(), "Message sent!", Toast.LENGTH_SHORT).show();
+                //khi App gửi sms kết quả về PendingIntent sentPI và deliverPI
+                smsManager.sendTextMessage(phone, null, msgContent, sentPI, deliverPI);
             }
         }, delayTimes);
 
