@@ -45,6 +45,8 @@ public class act_sms extends AppCompatActivity implements View.OnClickListener {
 
     Handler handler = new Handler();
 
+    /* In the onCreate() method, you perform basic application startup logic
+    *that should happen only once for the entire life of the activity.*/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +57,7 @@ public class act_sms extends AppCompatActivity implements View.OnClickListener {
         slideAnimation.setDuration(1000);
         getWindow().setEnterTransition(slideAnimation);
 
+        // set content view in activity
         setContentView(R.layout.activity_act_sms);
 
         ivBackHome = findViewById(R.id.ivBackHome_SMSPage);
@@ -66,6 +69,7 @@ public class act_sms extends AppCompatActivity implements View.OnClickListener {
         r_Min = findViewById(R.id.radioMin_SMSPage);
         r_Sec = findViewById(R.id.radioSec_SMSPage);
 
+        // check result of Radio Button
         if (r_Hour.isChecked()) {
             stringDelayTime = HOURS;
         } else if (r_Min.isChecked()) {
@@ -74,26 +78,30 @@ public class act_sms extends AppCompatActivity implements View.OnClickListener {
             stringDelayTime = SEC;
         }
 
+        //on click button event
         ivBackHome.setOnClickListener(this);
         r_Sec.setOnClickListener(this);
         r_Min.setOnClickListener(this);
         r_Hour.setOnClickListener(this);
         btnSetup.setOnClickListener(this);
 
+        // initialize Pending intent when receiver event occurs from BroadcastReceiver
         sentPI = PendingIntent.getBroadcast(this,0,new Intent(SENT),0);
         deliverPI = PendingIntent.getBroadcast(this,0,new Intent(DELIVERED),0);
 
     }
 
+    /*When an interruptive event occurs, the activity enters the Paused state, and the system invokes the onPause() callback.
+    *If the activity returns to the Resumed state from the Paused state, the system once again calls onResume() method.*/
     @Override
     protected void onResume() {
         super.onResume();
 
+        // phần code xử lý khi nhận được BroadcastReceiver từ PendingIntent sentPI
         smsSentReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
 
-                // phần code xử lý khi nhận được BroadcastReceiver từ PendingIntent sentPI
                 switch (getResultCode()){
                     case Activity.RESULT_OK:
                         Toast.makeText(getApplicationContext(), "SMS Sent!", Toast.LENGTH_SHORT).show();
@@ -119,6 +127,7 @@ public class act_sms extends AppCompatActivity implements View.OnClickListener {
             }
         };
 
+        // phần code xử lý khi nhận được BroadcastReceiver từ PendingIntent deliveredPI
         smsDeliveredReceiver = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -135,21 +144,25 @@ public class act_sms extends AppCompatActivity implements View.OnClickListener {
             }
         };
 
-        // Đăng ký BroadcastReceiver SMS_SENT và SMS_DELIVERED trong file Manifest
+        // Register BroadcastReceiver SMS SENT and SMS DELIVERED in the Manifest file
+        // to receive information about SENT and DELIVERED events.
         registerReceiver(smsSentReceiver, new IntentFilter(SENT));
         registerReceiver(smsDeliveredReceiver,new IntentFilter(DELIVERED));
 
     }
 
+    // When an interruptive event occurs, the activity enters the Paused state, and the system invokes the onPause() callback.
     @Override
     protected void onPause() {
         super.onPause();
 
+        // don't receive SENT and DELIVERED event when the APP on pause state
         unregisterReceiver(smsSentReceiver);
         unregisterReceiver(smsDeliveredReceiver);
 
     }
 
+    //control com back home page
     private void comebackHome(){
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             // Apply activity transition
@@ -164,11 +177,14 @@ public class act_sms extends AppCompatActivity implements View.OnClickListener {
         }
     }
 
+    //control send SMS message
     private void sendMessage(String phone, String msgContent) {
 
         // show Announce
         String announce = "Message will be sent after " + etTime.getText().toString() + " " + stringDelayTime;
         Toast.makeText(getApplicationContext(), announce, Toast.LENGTH_SHORT).show();
+
+        // get value delay times from choice result of radio button
         int delayTimes = Integer.parseInt(etTime.getText().toString()) * 1000;
         if (stringDelayTime.equals(MINS)) {
             delayTimes = delayTimes * 60;
@@ -183,7 +199,7 @@ public class act_sms extends AppCompatActivity implements View.OnClickListener {
             public void run() {
                 //Get the SmsManager instance and call the sendTextMessage method to send message
                 SmsManager smsManager = SmsManager.getDefault();
-                //khi App gửi sms kết quả về PendingIntent sentPI và deliverPI
+                //Execute send SMS message and recording event to sentPI and deliverPI variables
                 smsManager.sendTextMessage(phone, null, msgContent, sentPI, deliverPI);
             }
         }, delayTimes);
@@ -192,6 +208,7 @@ public class act_sms extends AppCompatActivity implements View.OnClickListener {
         comebackHome();
     }
 
+    // onClick handling
     @Override
     public void onClick(View view) {
 
@@ -201,6 +218,7 @@ public class act_sms extends AppCompatActivity implements View.OnClickListener {
                 comebackHome();
                 finish();
                 break;
+
             case R.id.btnSetup_SMSPage:// trường hợp click vào nút setup
                 //check filled fields, if not show announce
                 if (etPhoneNumber.getText().toString().isEmpty() || etSenderBox.getText().toString().isEmpty()) {
@@ -218,16 +236,19 @@ public class act_sms extends AppCompatActivity implements View.OnClickListener {
                     sendMessage(etPhoneNumber.getText().toString().trim(), etSenderBox.getText().toString());
                 }
                 break;
+
             case R.id.radioHour_SMSPage:
                 if (((RadioButton) view).isChecked()) {
                     stringDelayTime = HOURS;
                 }
                 break;
+
             case R.id.radioMin_SMSPage:
                 if (((RadioButton) view).isChecked()) {
                     stringDelayTime = MINS;
                 }
                 break;
+
             case R.id.radioSec_SMSPage:
                 if (((RadioButton) view).isChecked()) {
                     stringDelayTime = SEC;

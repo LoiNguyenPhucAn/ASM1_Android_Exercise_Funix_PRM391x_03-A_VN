@@ -128,12 +128,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    //    When user click on permission announcement, this code is executed
     @Override
-//    When user click on permission announcement, this code is executed
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
         switch (requestCode) {
+
             case PERMISSION_SMS:
                 if (permissions.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     sendMessage();
@@ -142,6 +144,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     btnSMS.setAlpha((float) 1.0);
                 }
                 break;
+
             case PERMISSION_PHONE:
                 if (permissions.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     makePhone();
@@ -150,6 +153,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     btnPhone.setAlpha((float) 1.0);
                 }
                 break;
+
             case PERMISSION_READ_STATE_AND_SMS:
                 if (permissions.length > 0 && grantResults[0] == PackageManager.PERMISSION_DENIED) {
                     Toast.makeText(this, "Please allow permission READ_PHONE_STATE for using it", Toast.LENGTH_SHORT).show();
